@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import axios from 'axios'
-import { io } from "socket.io-client";
 
 
 
@@ -13,14 +12,16 @@ const Home = () => {
     const fetchData = async()=>{
         // backend se data fetch krne ke liye, use axios package
         // earlier we used fetch, which comes with react
-        const fetchedData = await axios.get('http://localhost:3000/api/todo');
+        // const fetchedData = await axios.get('http://localhost:3000/api/todo');
+        const fetchedData = await axios.get('https://cola-todo-backend.onrender.com/api/todo');
         setTodos(fetchedData.data.todos); 
     }
 
     const handleSubmit = async(e)=>{
     e.preventDefault();
     setTodos([...todos, {task, priority, status:'Pending'}]);
-    const response = await axios.post('http://localhost:3000/api/todo/add',{task, priority});
+    // const response = await axios.post('http://localhost:3000/api/todo/add',{task, priority});
+    const response = await axios.post('https://cola-todo-backend.onrender.com/api/todo/add',{task, priority});
     setTask('');
     setPriority('medium');
 }
