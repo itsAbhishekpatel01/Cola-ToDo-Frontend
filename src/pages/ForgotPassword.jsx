@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../config';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ const ForgotPassword = () => {
     const handleSendOtp = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:3000/api/user/forgot-password`, { email });
+            const response = await axios.post(`${BASE_URL}/user/forgot-password`, { email });
             if (response.data.success) {
                 toast.success(response.data.message);
                 setStep(2);
@@ -28,8 +29,7 @@ const ForgotPassword = () => {
     const handleVerifyOtp = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:3000/api/user/verify-forgot-password-otp`, { email, otp });
-            console.log('Good:',otp, 'email',email);
+            const response = await axios.post(`${BASE_URL}/user/verify-forgot-password-otp`, { email, otp });
             if (response.data.success) {
                 toast.success(response.data.message);
                 setStep(3);
@@ -37,7 +37,6 @@ const ForgotPassword = () => {
                 toast.error(response.data.message);
             }
         } catch (error) {
-            console.log('error:',otp, 'email',email);
             toast.error(error.response.data.message ||  "Invalid OTP. Please try again.");
         }
     };
@@ -45,7 +44,7 @@ const ForgotPassword = () => {
     const handleResetPassword = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:3000/api/user/reset-password`, {
+            const response = await axios.post(`${BASE_URL}/user/reset-password`, {
                 email,
                 otp,
                 newPassword,
