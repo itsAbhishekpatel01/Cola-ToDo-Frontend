@@ -8,7 +8,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import toast from 'react-hot-toast';
-
+import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
@@ -17,10 +17,12 @@ const Home = () => {
     const [priority, setPriority] = useState('medium')
     const [editId, setEditId] = useState(null);
     const [editValue, setEditValue] = useState('')
+    const navigate = useNavigate();
 
     const fetchData = async()=>{
         try {
-            const fetchedData = await axios.get(`${BASE_URL}/todo/`);
+            const userId = JSON.parse(localStorage.getItem('userId'));
+            const fetchedData = await axios.post(`${BASE_URL}/todo/`,{userId});
             setTodos(fetchedData.data.todos);
         } catch (error) {
             console.error('Error fetching todos:', error);
@@ -30,7 +32,8 @@ const Home = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${BASE_URL}/todo/add`, { task, priority });
+            const userId = JSON.parse(localStorage.getItem('userId'));
+            const response = await axios.post(`${BASE_URL}/todo/add/${userId}`, { task, priority});
             setTodos([...todos, response.data.todo]); // Assuming the backend returns the added todo
             setTask('');
             setPriority('medium');
@@ -62,16 +65,20 @@ const Home = () => {
         setEditId(null);
     }
 
-
-    useEffect(()=>{
-        fetchData();
-    },[])
-
     const getColor=(priority)=>{
         if(priority==='low') return "text-green-500";
         else if(priority==='medium') return "text-orange-500";
         else return  "text-red-600";
     }
+
+    useEffect(()=>{
+        const userId = JSON.parse(localStorage.getItem('userId'));
+        if(!userId){
+            console.log(userId)
+            navigate('/login');
+        }
+        fetchData();
+    })
 
 
 
