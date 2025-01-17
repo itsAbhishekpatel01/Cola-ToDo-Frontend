@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import BASE_URL from '../config';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { SpinnerDotted } from 'spinners-react';
 
 
 
@@ -10,9 +11,12 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setpassword] = useState('')
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleLogin = async (e)=>{
-        e.preventDefault();
+        setIsLoading(true);
+        try {
+            e.preventDefault();
         const response = await axios.post(`${BASE_URL}/user/login`,{
             email, password
         });
@@ -23,6 +27,11 @@ const Login = () => {
             localStorage.setItem('userId', JSON.stringify(userId));
         } else{
             toast.error(response.data.message);
+        }
+        } catch (error) {
+            toast.error(response.data.message || 'An error occurred. Please try again.');
+        } finally{
+            setIsLoading(false);
         }
     }
     
@@ -62,7 +71,8 @@ const Login = () => {
                             type="submit"
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         >
-                            Sign In
+                            {!isLoading ? <p>Log In</p>
+                            : <span className='px-3  w-full flex'><SpinnerDotted size={23} thickness={128} speed={199} color="rgba(255, 255, 255, 1)"/></span>}
                         </button>
                         <div className='flex flex-col'>
                         <Link

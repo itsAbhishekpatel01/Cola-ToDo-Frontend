@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import BASE_URL from '../config';
+import { SpinnerDotted } from 'spinners-react';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
@@ -10,8 +11,10 @@ const ForgotPassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [step, setStep] = useState(1); // Step 1: Enter Email, Step 2: Enter OTP, Step 3: Reset Password
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleSendOtp = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             const response = await axios.post(`${BASE_URL}/user/forgot-password`, { email });
@@ -23,10 +26,13 @@ const ForgotPassword = () => {
             }
         } catch (error) {
             toast.error(error.response.data.message || "Something went wrong. Please try again later.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleVerifyOtp = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             const response = await axios.post(`${BASE_URL}/user/verify-forgot-password-otp`, { email, otp });
@@ -38,10 +44,13 @@ const ForgotPassword = () => {
             }
         } catch (error) {
             toast.error(error.response.data.message ||  "Invalid OTP. Please try again.");
+        } finally{
+            setIsLoading(false);
         }
     };
 
     const handleResetPassword = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             const response = await axios.post(`${BASE_URL}/user/reset-password`, {
@@ -57,6 +66,8 @@ const ForgotPassword = () => {
             }
         } catch (error) {
             toast.error(error.response.data.message || "Failed to reset password. Please try agai");
+        } finally{
+            setIsLoading(false);
         }
     };
 
@@ -82,9 +93,12 @@ const ForgotPassword = () => {
                         </div>
                         <button
                             type="submit"
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+                            className="bg-blue-500 flex justify-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                         >
-                            Send OTP
+                            {
+                                !isLoading ? <p>Send OTP</p>
+                                : <SpinnerDotted size={24} thickness={146} speed={199} color="rgba(255, 255, 255, 1)" />
+                            }
                         </button>
                     </form>
                 )}
@@ -107,9 +121,12 @@ const ForgotPassword = () => {
                         </div>
                         <button
                             type="submit"
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+                            className="bg-blue-500 flex justify-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                         >
-                            Verify OTP
+                            {
+                                !isLoading ? <p>Verify OTP</p>
+                                : <SpinnerDotted size={24} thickness={146} speed={199} color="rgba(255, 255, 255, 1)" />
+                            }
                         </button>
                     </form>
                 )}
@@ -132,9 +149,12 @@ const ForgotPassword = () => {
                         </div>
                         <button
                             type="submit"
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+                            className="bg-blue-500 flex justify-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                         >
-                            Reset Password
+                            {
+                                !isLoading ? <p>Reset Password</p>
+                                : <SpinnerDotted size={24} thickness={146} speed={199} color="rgba(255, 255, 255, 1)" />
+                            }
                         </button>
                     </form>
                 )}

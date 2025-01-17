@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import BASE_URL from '../config';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { SpinnerDotted } from 'spinners-react';
 
 
 const Register = () => {
@@ -11,8 +11,10 @@ const Register = () => {
     const [email, setEmail] = useState('')
     const [password, setpassword] = useState('')
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleRegister = async (e) => {
+        setIsLoading(true);
         e.preventDefault(); // Prevent the form from submitting and refreshing the page
         try {
             const response = await axios.post(`${BASE_URL}/user/register`, {
@@ -41,6 +43,9 @@ const Register = () => {
                 toast.error('An error occurred. Please try again.');
                 console.error('Error setting up request:', error.message);
             }
+        }
+        finally{
+            setIsLoading(false);
         }
     };
     
@@ -93,8 +98,11 @@ const Register = () => {
                             type="submit"
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         >
-                            Register
+                            {isLoading ? 
+                            <span className='px-5  w-full flex'><SpinnerDotted size={23} thickness={128} speed={199} color="rgba(255, 255, 255, 1)"/></span>
+                            : <p>Register</p> }
                         </button>
+
                         <Link
                             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
                             to={'/login'}
