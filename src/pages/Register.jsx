@@ -15,7 +15,7 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault(); // Prevent the form from submitting and refreshing the page
         try {
-            const response = await axios.post(`http://localhost:3000/api/user/register`, {
+            const response = await axios.post(`${BASE_URL}/user/register`, {
                 username,
                 email,
                 password,
