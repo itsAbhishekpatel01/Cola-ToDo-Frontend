@@ -6,7 +6,7 @@ import BASE_URL from '../config';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
-    const [otp, setOtp] = useState(0);
+    const [otp, setOtp] = useState();
     const [newPassword, setNewPassword] = useState('');
     const [step, setStep] = useState(1); // Step 1: Enter Email, Step 2: Enter OTP, Step 3: Reset Password
     const navigate = useNavigate();
