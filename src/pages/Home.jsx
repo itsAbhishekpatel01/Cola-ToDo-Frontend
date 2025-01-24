@@ -78,7 +78,7 @@ const Home = () => {
             navigate('/login');
         }
         fetchData();
-    })
+    },[])
 
 
 
