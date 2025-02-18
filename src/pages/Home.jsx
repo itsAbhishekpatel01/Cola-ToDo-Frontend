@@ -66,9 +66,16 @@ const Home = () => {
     }
 
     const getColor=(priority)=>{
-        if(priority==='low') return "text-green-500";
-        else if(priority==='medium') return "text-orange-500";
-        else return  "text-red-600";
+        switch(priority){
+            case 'low':
+                return 'text-green-500';
+            case 'medium':
+                return 'text-orange-500';
+            case 'high':
+                return 'text-red-700';
+            default:
+                return 'text-gray-600';
+        }
     }
 
     useEffect(()=>{
@@ -83,9 +90,9 @@ const Home = () => {
 
 
     return (
-        <div className='bg-slate-700 h-screen'>
+        <div className='bg-slate-700 pt-2 min-w-screen min-h-screen'>
             <Header />
-            <div>
+            <div className='mt-10'>
                 <form 
                     onSubmit={handleSubmit}
                     className='w-screen md:flex-row justify-center items-center flex flex-col pt-8 gap-4'>
@@ -96,23 +103,23 @@ const Home = () => {
                     <select
                         value={priority}
                         onChange={(e) => setPriority(e.target.value)}
-                        id="priority" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        id="priority" className="bg-gray-50 border cursor-grab py-2 px-16 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
                     </select>
-                    <button className='bg-pink-600  text-white px-4 py-1 rounded-lg active:scale-110 transition-all  duration-300'>Add task</button>
+                    <button className='bg-pink-600  text-white px-16 py-2 rounded-lg active:scale-110 transition-all  duration-300'>Add task</button>
                 </form>
 
                 <div className='w-screen  justify-center items-center flex mt-10'>
 
-                    <div className="shadow-md rounded-lg w-3/4 flex flex-col gap-3 px-5 py-3 bg-gray-200 ">
+                <div className="w-3/4 flex flex-col gap-3 px-5 py-3">
                     {
                         todos.length>0 && todos.map((todo)=>(
-                            <div key={todo._id} className='flex justify-between py-3'>
-                                <div className={`flex-1  flex gap-2 items-center ${getColor(todo.priority)}`}>
+                            <div key={todo._id} className='flex justify-between py-3 px-3 bg-white  hover:scale-[1.02] transition-all duration-300 rounded-lg'>
+                                <div className={`flex-1 flex gap-2 text-lg font-semibold items-center w-full  ${getColor(todo.priority)}`}>
                                     {/* <MdOutlineCheckBoxOutlineBlank className='text-black'/>  */}
-                                    {editId!=todo._id ? <p className='text-wrap'>{todo.task}</p>:
+                                    {editId!=todo._id ? <p className='break-words overflow-hidden  w-11/12'>{todo.task}</p>:
                                     <input type="text" className='w-full outline-none' 
                                     onChange={(e)=>{setEditValue(e.target.value)}} value={editValue} autoFocus
                                     onKeyDown={e=>{if(e.key==="Enter") handleUpdate()}}/>}
